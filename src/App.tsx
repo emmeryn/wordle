@@ -1,24 +1,20 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import { GameBoard } from "./components/GameBoard";
 
 function App() {
+  const MAX_ATTEMPTS = 6;
+  // const WORD_LENGTH = 5;
+
+  const [attempt, setAttempt] = useState('');
+  const [attempts, setAttempts] = useState(['TEST1']);
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Wordle</h1>
       </header>
+      <GameBoard rowNum={MAX_ATTEMPTS} attempts={attempts} currAttempt={attempt}/>
     </div>
   );
 }
