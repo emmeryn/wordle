@@ -9,6 +9,7 @@ function App() {
 
   const [attempt, setAttempt] = useState('');
   const [attempts, setAttempts] = useState<string[]>([]);
+  const [isGameOver, setIsGameOver] = useState(false)
   const [selectedLengthWordList] = useState<string[]>(() => {
     const masterWordList = require('word-list-json');
     const startIdx = masterWordList.lengths[WORD_LENGTH - 1];
@@ -21,6 +22,7 @@ function App() {
   });
 
   const onLetterPress = (letter: string) => {
+    if (isGameOver) return;
     const newAttempt = attempt + letter;
     if (newAttempt.length <= WORD_LENGTH) {
       setAttempt(attempt + letter);
@@ -30,6 +32,7 @@ function App() {
     setAttempt(attempt.slice(0, -1));
   };
   const onEnter = () => {
+    if (isGameOver) return;
     if (attempt.length !== WORD_LENGTH) {
       alert('Too little letters');
       return;
@@ -40,8 +43,10 @@ function App() {
     }
     if (attempts.length + 1 >= MAX_ATTEMPTS) {
       alert('Game over! Answer was ' + answer);
+      setIsGameOver(true);
     } else if (attempt === answer) {
       alert('Correct guess');
+      setIsGameOver(true);
     } else {
       alert('Wrong guess');
     }
