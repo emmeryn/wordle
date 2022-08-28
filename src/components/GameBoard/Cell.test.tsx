@@ -5,7 +5,7 @@ import { Cell } from "./Cell";
 test('renders letter when letter is provided', () => {
   const letter = 't';
   render(<Cell letter={letter}/>);
-  const letterCell = screen.getByText(letter);
+  const letterCell = screen.getByText(letter.toUpperCase());
   expect(letterCell).toBeInTheDocument();
 });
 
