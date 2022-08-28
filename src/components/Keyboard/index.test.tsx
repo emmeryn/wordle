@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { Keyboard } from "./index";
 import userEvent from "@testing-library/user-event";
 
@@ -19,5 +19,38 @@ test('handles user keyboard input', () => {
   expect(onEnter).toBeCalledTimes(2);
 
   userEvent.keyboard('[Backspace]');
+  expect(onBackspace).toBeCalled();
+});
+
+test('renders on-screen keyboard', () => {
+  const onLetterPress = jest.fn();
+  const onBackspace = jest.fn();
+  const onEnter = jest.fn();
+
+  const { container } = render(
+    <Keyboard onLetterPress={onLetterPress} onBackspace={onBackspace} onEnter={onEnter}/>
+  );
+
+  for (let letter = 'A'.charCodeAt(0); letter <= 'Z'.charCodeAt(0); letter++) {
+    const letterElement = within(container).queryByText(String.fromCharCode(letter));
+    expect(letterElement).toBeInTheDocument();
+  }
+});
+
+test('handles on-screen keyboard click events', () => {
+  const onLetterPress = jest.fn();
+  const onBackspace = jest.fn();
+  const onEnter = jest.fn();
+  render(<Keyboard onLetterPress={onLetterPress} onBackspace={onBackspace} onEnter={onEnter}/>);
+
+  for (let charCode = 'A'.charCodeAt(0); charCode <= 'Z'.charCodeAt(0); charCode++) {
+    const letter = String.fromCharCode(charCode);
+    userEvent.click(screen.getByText(letter));
+    expect(onLetterPress).toBeCalledWith(letter);
+  }
+  userEvent.click(screen.getByText('Enter'));
+  expect(onEnter).toBeCalled();
+
+  userEvent.click(screen.getByText('backspace.svg'));
   expect(onBackspace).toBeCalled();
 });
