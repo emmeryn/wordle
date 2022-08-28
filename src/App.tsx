@@ -38,15 +38,13 @@ function App() {
       alert('Invalid guess');
       return;
     }
-    if (attempt === answer) {
-      alert('Correct guess');
-      return;
-    }
     if (attempts.length + 1 >= MAX_ATTEMPTS) {
       alert('Game over! Answer was ' + answer);
-      return;
+    } else if (attempt === answer) {
+      alert('Correct guess');
+    } else {
+      alert('Wrong guess');
     }
-    alert('Wrong guess');
     setAttempts(attempts.concat(attempt));
     setAttempt('');
   };
