@@ -54,7 +54,7 @@ function App() {
       <header className="App-header">
         <h1>Wordle</h1>
       </header>
-      <GameBoard rowNum={MAX_ATTEMPTS} attempts={attempts} currAttempt={attempt}/>
+      <GameBoard answer={answer} rowNum={MAX_ATTEMPTS} attempts={attempts} currAttempt={attempt}/>
       <Keyboard onLetterPress={onLetterPress} onBackspace={onBackspace} onEnter={onEnter}/>
     </div>
   );

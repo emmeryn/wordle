@@ -1,28 +1,52 @@
-import { Cell } from "./Cell";
+import { Cell, CellType } from "./Cell";
+import { getLetterMap } from "./utils";
 
-type Props = { word: string, rowType: BoardRowType };
+type Props = { word: string, rowType: BoardRowType, answer?: string };
 
 export enum BoardRowType {
   ATTEMPTED,
   CURR_ATTEMPT,
   AWAITING_ATTEMPT
 }
+
 const WORD_LENGTH = 5;
 
-export const BoardRow = ({ word, rowType }: Props) => {
+export const BoardRow = ({ word, rowType, answer }: Props) => {
   const letters = Array.from(word);
   const emptyLetters = Array.from(new Array(WORD_LENGTH - letters.length));
+  const allLetters = letters.concat(emptyLetters);
+
+  let cells: JSX.Element[] = [];
+
+  switch (rowType) {
+    case BoardRowType.ATTEMPTED:
+      const letterMap = getLetterMap(answer!);
+      allLetters.forEach((letter, idx) => {
+        if (!letterMap[letter]) {
+          cells.push(<Cell key={idx} letter={letter} type={CellType.WRONG_LETTER}/>);
+        } else {
+          const correctLetter = answer![idx];
+          if (letter === correctLetter) {
+            cells.push(<Cell key={idx} letter={letter} type={CellType.CORRECT}/>);
+          } else {
+            letterMap[letter]--;
+            cells.push(<Cell key={idx} letter={letter} type={CellType.WRONG_POS}/>);
+          }
+        }
+      });
+      break;
+    case BoardRowType.CURR_ATTEMPT:
+    case BoardRowType.AWAITING_ATTEMPT:
+      cells.push(
+        ...allLetters.map((letter, idx) => (
+          <Cell key={idx} letter={letter}/>
+        )));
+      break;
+  }
 
   return (
-    <div className={'flex flex-row justify-center text-xl space-x-1'} data-testid={'boardRow'}>
-      {letters.map((letter, idx) => (
-          <Cell key={idx} letter={letter}/>
-        )
-      )}
-      {emptyLetters.map((_, idx) => (
-          <Cell key={idx} letter={''}/>
-        )
-      )}
+    <div className={'flex flex-row justify-center text-xl space-x-1 pb-1'} data-testid={'boardRow'}>
+      {cells}
     </div>
   )
 }
