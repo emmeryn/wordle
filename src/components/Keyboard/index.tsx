@@ -1,14 +1,32 @@
 import { useEffect } from "react";
 import { ReactComponent as BackspaceLogo } from '../../images/backspace.svg';
-import { Key } from "./Key";
+import { Key, KeyType } from "./Key";
+import { getLetterMap } from "../GameBoard/utils";
 
 type Props = {
+  answer: string,
+  attempts: string[],
   onLetterPress: (letter: string) => void,
   onBackspace: () => void,
   onEnter: () => void,
 };
 
-export const Keyboard = ({ onLetterPress, onBackspace, onEnter }: Props) => {
+export const Keyboard = ({ answer, attempts, onLetterPress, onBackspace, onEnter }: Props) => {
+  const attemptsToKeyTypeMap: { [key: string]: KeyType; } = {};
+  const answerLetterMap = getLetterMap(answer);
+
+  attempts.forEach((attempt) => {
+    Array.from(attempt).forEach((letter, idx) => {
+      if (!answerLetterMap[letter]) {
+        attemptsToKeyTypeMap[letter] = KeyType.WRONG_LETTER;
+      } else if (letter === answer[idx]) {
+        attemptsToKeyTypeMap[letter] = KeyType.CORRECT;
+      } else if (attemptsToKeyTypeMap[letter] !== KeyType.CORRECT) {
+        attemptsToKeyTypeMap[letter] = KeyType.WRONG_POS;
+      }
+    })
+  })
+
   useEffect(() => {
     const keyUpListener = (e: KeyboardEvent) => {
       switch (e.code) {
@@ -34,19 +52,19 @@ export const Keyboard = ({ onLetterPress, onBackspace, onEnter }: Props) => {
   return (
     <div data-testid={'keyboard'}>
       <div className={'flex justify-center'}>
-        {['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'].map((letter) => (
-          <Key displayText={letter} onClick={() => onLetterPress(letter)} key={letter}/>
+        {['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'].map((letter) => (
+          <Key displayText={letter} type={attemptsToKeyTypeMap[letter]} onClick={() => onLetterPress(letter)} key={letter}/>
         ))}
       </div>
       <div className={'flex justify-center'}>
-        {['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'].map((letter) => (
-          <Key displayText={letter} onClick={() => onLetterPress(letter)} key={letter}/>
+        {['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'].map((letter) => (
+          <Key displayText={letter} type={attemptsToKeyTypeMap[letter]} onClick={() => onLetterPress(letter)} key={letter}/>
         ))}
       </div>
       <div className={'flex justify-center'}>
         <Key displayText={'Enter'} onClick={() => onEnter()}/>
-        {['Z', 'X', 'C', 'V', 'B', 'N', 'M'].map((letter) => (
-          <Key displayText={letter} onClick={() => onLetterPress(letter)} key={letter}/>
+        {['z', 'x', 'c', 'v', 'b', 'n', 'm'].map((letter) => (
+          <Key displayText={letter} type={attemptsToKeyTypeMap[letter]} onClick={() => onLetterPress(letter)} key={letter}/>
         ))}
         <Key displayText={''} onClick={() => onBackspace()}>
           <BackspaceLogo/>

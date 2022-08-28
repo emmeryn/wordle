@@ -1,6 +1,6 @@
 import { BoardRow, BoardRowType } from "./BoardRow";
 
-type Props = { answer: string, rowNum: number, attempts: string[], currAttempt: string };
+type Props = { answer: string, attempts: string[], rowNum: number, currAttempt: string };
 
 export const GameBoard = ({ answer, rowNum, attempts, currAttempt }: Props) => {
   const attemptedRows = attempts.map((attempt, idx) =>

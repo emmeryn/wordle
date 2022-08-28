@@ -7,7 +7,7 @@ test('handles user keyboard input', () => {
   const onLetterPress = jest.fn();
   const onBackspace = jest.fn();
   const onEnter = jest.fn();
-  render(<Keyboard onLetterPress={onLetterPress} onBackspace={onBackspace} onEnter={onEnter}/>);
+  render(<Keyboard answer={'answe'} attempts={[]} onLetterPress={onLetterPress} onBackspace={onBackspace} onEnter={onEnter}/>);
 
   for (let charCode = 'a'.charCodeAt(0); charCode <= 'z'.charCodeAt(0); charCode++) {
     const letter = String.fromCharCode(charCode);
@@ -28,7 +28,7 @@ test('renders on-screen keyboard', () => {
   const onEnter = jest.fn();
 
   const { container } = render(
-    <Keyboard onLetterPress={onLetterPress} onBackspace={onBackspace} onEnter={onEnter}/>
+    <Keyboard answer={'answe'} attempts={[]} onLetterPress={onLetterPress} onBackspace={onBackspace} onEnter={onEnter}/>
   );
 
   for (let letter = 'A'.charCodeAt(0); letter <= 'Z'.charCodeAt(0); letter++) {
@@ -41,14 +41,14 @@ test('handles on-screen keyboard click events', () => {
   const onLetterPress = jest.fn();
   const onBackspace = jest.fn();
   const onEnter = jest.fn();
-  render(<Keyboard onLetterPress={onLetterPress} onBackspace={onBackspace} onEnter={onEnter}/>);
+  render(<Keyboard answer={'answe'} attempts={[]} onLetterPress={onLetterPress} onBackspace={onBackspace} onEnter={onEnter}/>);
 
-  for (let charCode = 'A'.charCodeAt(0); charCode <= 'Z'.charCodeAt(0); charCode++) {
+  for (let charCode = 'a'.charCodeAt(0); charCode <= 'z'.charCodeAt(0); charCode++) {
     const letter = String.fromCharCode(charCode);
-    userEvent.click(screen.getByText(letter));
+    userEvent.click(screen.getByText(letter.toUpperCase()));
     expect(onLetterPress).toBeCalledWith(letter);
   }
-  userEvent.click(screen.getByText('Enter'));
+  userEvent.click(screen.getByText('ENTER'));
   expect(onEnter).toBeCalled();
 
   userEvent.click(screen.getByText('backspace.svg'));
