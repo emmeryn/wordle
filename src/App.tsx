@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { GameBoard } from "./components/GameBoard";
 import { Keyboard } from "./components/Keyboard";
 import { StatsModal } from "./components/StatsModal";
 import { MAX_ATTEMPTS } from "./constants/config";
+import { updateAndSaveStats } from "./utils/stats";
 
 function App() {
   const WORD_LENGTH = 5; // todo: let user set word length
@@ -48,6 +49,7 @@ function App() {
     setAttempts(newAttempts);
     if (newAttempts.length >= MAX_ATTEMPTS || attempt === answer) {
       setIsGameOver(true);
+      updateAndSaveStats(newAttempts);
       setIsStatsModalOpen(true);
     }
     setAttempt('');
@@ -58,9 +60,12 @@ function App() {
       <header className="App-header">
         <h1>Wordle</h1>
       </header>
-      <StatsModal answer={answer} attempts={attempts} isOpen={isStatsModalOpen} onClose={() => {setIsStatsModalOpen(false)}}/>
+      <StatsModal answer={answer} attempts={attempts} isOpen={isStatsModalOpen} onClose={() => {
+        setIsStatsModalOpen(false)
+      }}/>
       <GameBoard answer={answer} rowNum={MAX_ATTEMPTS} attempts={attempts} currAttempt={attempt}/>
-      <Keyboard answer={answer} attempts={attempts} onLetterPress={onLetterPress} onBackspace={onBackspace} onEnter={onEnter}/>
+      <Keyboard answer={answer} attempts={attempts} onLetterPress={onLetterPress} onBackspace={onBackspace}
+                onEnter={onEnter}/>
     </div>
   );
 }

@@ -1,5 +1,7 @@
 import { Dialog } from "@headlessui/react";
 import { MAX_ATTEMPTS } from "../../constants/config";
+import { StatCell } from "./StatCell";
+import { loadStats } from "../../utils/stats";
 
 type Props = {
   answer: string,
@@ -15,6 +17,7 @@ export const StatsModal = ({ answer, attempts, isOpen, onClose }: Props) => {
   } else if (attempts[attempts.length - 1] === answer) {
     message = `You guessed "${answer}" correctly!`;
   }
+  const stats = loadStats();
   return (
     <Dialog open={isOpen} onClose={onClose} as={'div'}
             className={'fixed inset-0 z-10 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center'}>
@@ -28,18 +31,25 @@ export const StatsModal = ({ answer, attempts, isOpen, onClose }: Props) => {
         </Dialog.Description>
 
         <div className="mt-2">
-          <p className={'text-sm text-gray-500'}>
-          </p>
+          <h4>Your Stats</h4>
+          <div className="my-2 flex justify-center">
+            <StatCell title={'Games Played'} value={`${stats.gamesPlayed}`}/>
+            <StatCell title={'Win %'} value={`${Math.round(100 * stats.gamesWon / stats.gamesPlayed)}%`}/>
+            <StatCell title={'Current Streak'} value={`${stats.currentStreak}`}/>
+            <StatCell title={'Max Streak'} value={`${stats.maxStreak}`}/>
+          </div>
         </div>
 
         <div className="px-4 py-3 sm:px-6 sm:flex sm:flex-row justify-center">
           <button type={'button'}
                   className={'inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2'}
-                  onClick={() => null}>New Game
+                  onClick={() => null}>
+            New Game
           </button>
           <button type={'button'}
                   className={'ml-2 inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2'}
-                  onClick={onClose}>Close
+                  onClick={onClose}>
+            Close
           </button>
         </div>
       </Dialog.Panel>
