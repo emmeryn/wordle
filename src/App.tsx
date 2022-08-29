@@ -44,11 +44,12 @@ function App() {
       alert('Invalid guess');
       return;
     }
-    if (attempts.length + 1 >= MAX_ATTEMPTS || attempt === answer) {
+    const newAttempts = attempts.concat(attempt);
+    setAttempts(newAttempts);
+    if (newAttempts.length >= MAX_ATTEMPTS || attempt === answer) {
       setIsGameOver(true);
       setIsStatsModalOpen(true);
     }
-    setAttempts(attempts.concat(attempt));
     setAttempt('');
   };
 
