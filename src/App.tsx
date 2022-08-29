@@ -5,6 +5,7 @@ import { Keyboard } from "./components/Keyboard";
 import { StatsModal } from "./components/StatsModal";
 import { MAX_ATTEMPTS, WORD_LENGTH } from "./constants/config";
 import { updateAndSaveStats } from "./utils/stats";
+import { getRandomWord } from "./utils/words";
 
 function App() {
   const [attempt, setAttempt] = useState('');
@@ -18,10 +19,7 @@ function App() {
     const endIdx = masterWordList.lengths[WORD_LENGTH];
     return masterWordList.slice(startIdx, endIdx);
   });
-  const [answer] = useState(() => {
-    const randIdx = Math.floor(Math.random() * (selectedLengthWordList.length - 1));
-    return selectedLengthWordList[randIdx];
-  });
+  const [answer, setAnswer] = useState(() => getRandomWord(selectedLengthWordList));
 
   const onLetterPress = (letter: string) => {
     if (isGameOver) return;
@@ -45,21 +43,28 @@ function App() {
     }
     const newAttempts = attempts.concat(attempt);
     setAttempts(newAttempts);
+    setAttempt('');
     if (newAttempts.length >= MAX_ATTEMPTS || attempt === answer) {
       setIsGameOver(true);
       updateAndSaveStats(newAttempts);
       setIsStatsModalOpen(true);
     }
-    setAttempt('');
   };
+  const startNewGame = () => {
+    setAttempt('');
+    setAttempts([]);
+    setIsGameOver(false);
+    setIsStatsModalOpen(false);
+    setAnswer(getRandomWord(selectedLengthWordList));
+  }
 
   return (
     <div className="App">
       <header className="App-header">
         <h1>Wordle</h1>
       </header>
-      <StatsModal answer={answer} attempts={attempts} isOpen={isStatsModalOpen} onClose={() => {
-        setIsStatsModalOpen(false)
+      <StatsModal answer={answer} attempts={attempts} isOpen={isStatsModalOpen} onStartNewGame={startNewGame} onClose={() => {
+        setIsStatsModalOpen(false);
       }}/>
       <GameBoard answer={answer} rowNum={MAX_ATTEMPTS} attempts={attempts} currAttempt={attempt}/>
       <Keyboard answer={answer} attempts={attempts} onLetterPress={onLetterPress} onBackspace={onBackspace}

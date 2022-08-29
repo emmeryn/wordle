@@ -7,10 +7,11 @@ type Props = {
   answer: string,
   attempts: string[],
   isOpen: boolean,
+  onStartNewGame: () => void,
   onClose: () => void
 };
 
-export const StatsModal = ({ answer, attempts, isOpen, onClose }: Props) => {
+export const StatsModal = ({ answer, attempts, isOpen, onStartNewGame, onClose }: Props) => {
   let message = '';
   if (attempts.length + 1 >= MAX_ATTEMPTS) {
     message = `The answer was "${answer}"!`;
@@ -43,7 +44,7 @@ export const StatsModal = ({ answer, attempts, isOpen, onClose }: Props) => {
         <div className="px-4 py-3 sm:px-6 sm:flex sm:flex-row justify-center">
           <button type={'button'}
                   className={'inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2'}
-                  onClick={() => null}>
+                  onClick={onStartNewGame}>
             New Game
           </button>
           <button type={'button'}
