@@ -21,17 +21,22 @@ export const BoardRow = ({ word, rowType, answer }: Props) => {
   switch (rowType) {
     case BoardRowType.ATTEMPTED:
       const letterMap = getLetterMap(answer!);
+      // prioritize correct letters first
       allLetters.forEach((letter, idx) => {
-        if (!letterMap[letter]) {
+        const correctLetter = answer![idx];
+        if (letter === correctLetter) {
+          letterMap[letter]--;
+        }
+      });
+      allLetters.forEach((letter, idx) => {
+        const correctLetter = answer![idx];
+        if (letter === correctLetter) {
+          cells.push(<Cell key={idx} letter={letter} type={CellType.CORRECT}/>);
+        } else if (!letterMap[letter]) {
           cells.push(<Cell key={idx} letter={letter} type={CellType.WRONG_LETTER}/>);
         } else {
-          const correctLetter = answer![idx];
-          if (letter === correctLetter) {
-            cells.push(<Cell key={idx} letter={letter} type={CellType.CORRECT}/>);
-          } else {
-            letterMap[letter]--;
-            cells.push(<Cell key={idx} letter={letter} type={CellType.WRONG_POS}/>);
-          }
+          cells.push(<Cell key={idx} letter={letter} type={CellType.WRONG_POS}/>);
+          letterMap[letter]--;
         }
       });
       break;
