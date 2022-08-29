@@ -1,5 +1,6 @@
 import { Cell, CellType } from "./Cell";
 import { getLetterMap } from "./utils";
+import { WORD_LENGTH } from "../../constants/config";
 
 type Props = { word: string, rowType: BoardRowType, answer?: string };
 
@@ -8,8 +9,6 @@ export enum BoardRowType {
   CURR_ATTEMPT,
   AWAITING_ATTEMPT
 }
-
-const WORD_LENGTH = 5;
 
 export const BoardRow = ({ word, rowType, answer }: Props) => {
   const letters = Array.from(word);

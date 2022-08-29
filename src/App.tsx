@@ -3,12 +3,10 @@ import './App.css';
 import { GameBoard } from "./components/GameBoard";
 import { Keyboard } from "./components/Keyboard";
 import { StatsModal } from "./components/StatsModal";
-import { MAX_ATTEMPTS } from "./constants/config";
+import { MAX_ATTEMPTS, WORD_LENGTH } from "./constants/config";
 import { updateAndSaveStats } from "./utils/stats";
 
 function App() {
-  const WORD_LENGTH = 5; // todo: let user set word length
-
   const [attempt, setAttempt] = useState('');
   const [attempts, setAttempts] = useState<string[]>([]);
   const [isGameOver, setIsGameOver] = useState(false)
