@@ -1,8 +1,11 @@
 import { BoardRow, BoardRowType } from "./BoardRow";
+import { useContext } from "react";
+import { GameContext } from "../../contexts/Game";
 
-type Props = { answer: string, attempts: string[], rowNum: number, currAttempt: string };
+type Props = { rowNum: number, currAttempt: string };
 
-export const GameBoard = ({ answer, rowNum, attempts, currAttempt }: Props) => {
+export const GameBoard = ({ rowNum, currAttempt }: Props) => {
+  const { answer, attempts } = useContext(GameContext);
   const attemptedRows = attempts.map((attempt, idx) =>
     <BoardRow word={attempt} rowType={BoardRowType.ATTEMPTED} answer={answer} key={idx}/>
   );

@@ -24,7 +24,7 @@ test('renders stats modal with user statistics', () => {
   const isOpen = true;
   const onStartNewGame = jest.fn();
   const onClose = jest.fn();
-  render(<StatsModal answer={answer} attempts={attempts} isOpen={isOpen} onStartNewGame={onStartNewGame}
+  render(<StatsModal isOpen={isOpen} onStartNewGame={onStartNewGame}
                      onClose={onClose}/>);
 
   const gamesPlayedElement = screen.getByText('Games Played');

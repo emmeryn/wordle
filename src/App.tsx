@@ -4,6 +4,7 @@ import { GameBoard } from "./components/GameBoard";
 import { Keyboard } from "./components/Keyboard";
 import { StatsModal } from "./components/StatsModal";
 import { MAX_ATTEMPTS, WORD_LENGTH } from "./constants/config";
+import { GameContext } from './contexts/Game';
 import { updateAndSaveStats } from "./utils/stats";
 import { getRandomWord } from "./utils/words";
 
@@ -63,12 +64,18 @@ function App() {
       <header className="App-header">
         <h1>Wordle</h1>
       </header>
-      <StatsModal answer={answer} attempts={attempts} isOpen={isStatsModalOpen} onStartNewGame={startNewGame} onClose={() => {
-        setIsStatsModalOpen(false);
-      }}/>
-      <GameBoard answer={answer} rowNum={MAX_ATTEMPTS} attempts={attempts} currAttempt={attempt}/>
-      <Keyboard answer={answer} attempts={attempts} onLetterPress={onLetterPress} onBackspace={onBackspace}
-                onEnter={onEnter}/>
+      <GameContext.Provider value={{
+        answer,
+        attempts,
+      }}>
+        <StatsModal isOpen={isStatsModalOpen} onStartNewGame={startNewGame}
+                    onClose={() => {
+                      setIsStatsModalOpen(false);
+                    }}/>
+        <GameBoard rowNum={MAX_ATTEMPTS} currAttempt={attempt}/>
+        <Keyboard onLetterPress={onLetterPress} onBackspace={onBackspace}
+                  onEnter={onEnter}/>
+      </GameContext.Provider>
     </div>
   );
 }

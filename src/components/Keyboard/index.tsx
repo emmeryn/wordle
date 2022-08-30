@@ -1,17 +1,18 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { ReactComponent as BackspaceLogo } from '../../images/backspace.svg';
 import { Key, KeyType } from "./Key";
 import { getLetterMap } from "../GameBoard/utils";
+import { GameContext } from "../../contexts/Game";
 
 type Props = {
-  answer: string,
-  attempts: string[],
   onLetterPress: (letter: string) => void,
   onBackspace: () => void,
   onEnter: () => void,
 };
 
-export const Keyboard = ({ answer, attempts, onLetterPress, onBackspace, onEnter }: Props) => {
+export const Keyboard = ({ onLetterPress, onBackspace, onEnter }: Props) => {
+  const { answer, attempts } = useContext(GameContext);
+
   const attemptsToKeyTypeMap: { [key: string]: KeyType; } = {};
   const answerLetterMap = getLetterMap(answer);
 

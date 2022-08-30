@@ -2,12 +2,21 @@ import React from 'react';
 import { render, screen, within } from '@testing-library/react';
 import { Keyboard } from "./index";
 import userEvent from "@testing-library/user-event";
+import { GameContext } from '../../contexts/Game';
 
 test('handles user keyboard input', () => {
   const onLetterPress = jest.fn();
   const onBackspace = jest.fn();
   const onEnter = jest.fn();
-  render(<Keyboard answer={'answe'} attempts={[]} onLetterPress={onLetterPress} onBackspace={onBackspace} onEnter={onEnter}/>);
+  render(
+    <GameContext.Provider value={{
+      answer: 'answe',
+      attempts: [],
+    }}>
+      <Keyboard onLetterPress={onLetterPress} onBackspace={onBackspace}
+                onEnter={onEnter}/>
+    </GameContext.Provider>
+  );
 
   for (let charCode = 'a'.charCodeAt(0); charCode <= 'z'.charCodeAt(0); charCode++) {
     const letter = String.fromCharCode(charCode);
@@ -28,7 +37,13 @@ test('renders on-screen keyboard', () => {
   const onEnter = jest.fn();
 
   const { container } = render(
-    <Keyboard answer={'answe'} attempts={[]} onLetterPress={onLetterPress} onBackspace={onBackspace} onEnter={onEnter}/>
+    <GameContext.Provider value={{
+      answer: 'answe',
+      attempts: [],
+    }}>
+      <Keyboard onLetterPress={onLetterPress} onBackspace={onBackspace}
+                onEnter={onEnter}/>
+    </GameContext.Provider>
   );
 
   for (let letter = 'A'.charCodeAt(0); letter <= 'Z'.charCodeAt(0); letter++) {
@@ -41,7 +56,15 @@ test('handles on-screen keyboard click events', () => {
   const onLetterPress = jest.fn();
   const onBackspace = jest.fn();
   const onEnter = jest.fn();
-  render(<Keyboard answer={'answe'} attempts={[]} onLetterPress={onLetterPress} onBackspace={onBackspace} onEnter={onEnter}/>);
+  render(
+    <GameContext.Provider value={{
+      answer: 'answe',
+      attempts: [],
+    }}>
+      <Keyboard onLetterPress={onLetterPress} onBackspace={onBackspace}
+                onEnter={onEnter}/>
+    </GameContext.Provider>
+  );
 
   for (let charCode = 'a'.charCodeAt(0); charCode <= 'z'.charCodeAt(0); charCode++) {
     const letter = String.fromCharCode(charCode);

@@ -3,16 +3,17 @@ import { MAX_ATTEMPTS } from "../../constants/config";
 import { StatCell } from "./StatCell";
 import { loadStats } from "../../utils/stats";
 import { GuessDistributionGraph } from "./GuessDistributionGraph";
+import { useContext } from "react";
+import { GameContext } from "../../contexts/Game";
 
 type Props = {
-  answer: string,
-  attempts: string[],
   isOpen: boolean,
   onStartNewGame: () => void,
   onClose: () => void
 };
 
-export const StatsModal = ({ answer, attempts, isOpen, onStartNewGame, onClose }: Props) => {
+export const StatsModal = ({ isOpen, onStartNewGame, onClose }: Props) => {
+  const { answer, attempts } = useContext(GameContext);
   let message = '';
   if (attempts.length + 1 >= MAX_ATTEMPTS) {
     message = `The answer was "${answer}"!`;
