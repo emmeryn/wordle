@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import React from "react";
 import { StatsModal } from "./index";
+import { MAX_ATTEMPTS } from "../../constants/config";
 
 jest.mock('../../utils/stats', () => ({
   loadStats: () => {
@@ -9,6 +10,7 @@ jest.mock('../../utils/stats', () => ({
       gamesWon: 5,
       currentStreak: 1,
       maxStreak: 7,
+      guessDistribution: [0, 0, 1, 3, 1, 0],
     }
   }
 }))
@@ -16,7 +18,7 @@ beforeEach(() => {
   jest.resetAllMocks();
 });
 
-test('renders stats modal', () => {
+test('renders stats modal with user statistics', () => {
   const answer = 'right';
   const attempts = ['wrong', 'right'];
   const isOpen = true;

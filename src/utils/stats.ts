@@ -7,6 +7,7 @@ export type Stats = {
   gamesWon: number;
   currentStreak: number;
   maxStreak: number;
+  guessDistribution: number[];
 };
 
 export const updateAndSaveStats = (attempts: string[]) => {
@@ -16,6 +17,7 @@ export const updateAndSaveStats = (attempts: string[]) => {
   if (attempts.length < MAX_ATTEMPTS) {
     stats.gamesWon++;
     stats.currentStreak++;
+    stats.guessDistribution[attempts.length - 1]++;
   } else {
     stats.currentStreak = 0;
   }
@@ -30,6 +32,7 @@ export const loadStats: () => Stats = () => {
     gamesWon: 0,
     currentStreak: 0,
     maxStreak: 0,
+    guessDistribution: Array.from(new Array(MAX_ATTEMPTS), () => 0)
   };
   const loadedStats = localStorage.getItem(statKey);
   return loadedStats !== null ? JSON.parse(loadedStats) : initialStats;
